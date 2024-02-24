@@ -26,6 +26,59 @@ fun ConstraintLayoutContent() {
     }
 }
 
+/*
+* Guidelines are small visual helpers to design layouts with. Composables can be 
+* constrained to a guideline. Guidelines are useful for positioning elements at a
+* certain dp or percentage inside the parent composable.
+
+* There are two different kinds of guidelines, vertical and horizontal. The two 
+* horizontal ones are top and bottom, and the two vertical are start and end.
+
+* Note: Consider using the Spacer composable to achieve a similar effect with 
+* Rows and Columns.
+*/
+ConstraintLayout {
+    // Create guideline from the start of the parent at 10% the width of the Composable
+    val startGuideline = createGuidelineFromStart(0.1f)
+    // Create guideline from the end of the parent at 10% the width of the Composable
+    val endGuideline = createGuidelineFromEnd(0.1f)
+    //  Create guideline from 16 dp from the top of the parent
+    val topGuideline = createGuidelineFromTop(16.dp)
+    //  Create guideline from 16 dp from the bottom of the parent
+    val bottomGuideline = createGuidelineFromBottom(16.dp)
+}
+
+/*
+* Barriers reference multiple composables to create a virtual guideline based 
+* on the most extreme widget on the specified side.
+
+* To create a barrier, use createTopBarrier() (or: createBottomBarrier(), 
+* createEndBarrier(), createStartBarrier()), and provide the references that 
+* should make up the barrier.
+*/
+ConstraintLayout {
+    val constraintSet = ConstraintSet {
+        val button = createRefFor("button")
+        val text = createRefFor("text")
+
+        val topBarrier = createTopBarrier(button, text)
+    }
+}
+
+/*
+* Chains provide group-like behavior in a single axis (horizontally or 
+* vertically) . The other axis can be constrained independently.
+*/
+ConstraintLayout {
+    val constraintSet = ConstraintSet {
+        val button = createRefFor("button")
+        val text = createRefFor("text")
+
+        val verticalChain = createVerticalChain(button, text, chainStyle = ChainStyle.Spread)
+        val horizontalChain = createHorizontalChain(button, text)
+    }
+}
+
 @Composable
 fun MessageList(messages: List<Message>) {
     Column {
